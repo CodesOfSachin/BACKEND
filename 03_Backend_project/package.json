@@ -5,7 +5,8 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "node index.js"
+    "start": "node /index.js",
+    "dev": "nodemon src/index.js"
   },
   "keywords": [
     "JavaScript",
@@ -15,5 +16,8 @@
   "license": "ISC",
   "dependencies": {
     "dotenv": "^17.2.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
   }
 }
