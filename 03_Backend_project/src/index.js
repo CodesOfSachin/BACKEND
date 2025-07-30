@@ -1,23 +1,42 @@
-import express from 'express';
-import mongoose from 'mongoose';
-import { DB_NAME } from './constant';
+import dotenv from 'dotenv'
 
-const app = express();
+dotenv.config({
+    path: './env'
+})
 
-//1st Approach for Database connection.
+// 2nd Approach for Database connection.
 
-;( async () => {
-    try{
-       await mongoose.connect(`${process.env.MONGODB_URI}/${DB_NAME}`)
-       app.on("error: ", (error) => {
-        console.log("Error: ", error)
-       })
+import connectDB from './db/index.js'
 
-       app.listen(process.env.PORT, () => {
-        console.log(`App is listening on port: ${process.env.PORT}`);
-       } )
-    } catch (err) {
-        console.log('Error: ', err);
-        throw err
-    }
-})()
+connectDB();
+
+
+
+
+
+
+
+// //1st Approach for Database connection.
+// import mongoose from 'mongoose';
+// import { DB_NAME } from './constant';
+// import express from 'express';
+// const app = express();
+
+
+// ;( async () => {
+//     try{
+//        const connectionInstance = await mongoose.connect(`${process.env.MONGODB_URI}/${DB_NAME}`)
+//        app.on("error: ", (error) => {
+//         console.log("Error: ", error)
+//        })
+
+//        app.listen(process.env.PORT, () => {
+//         console.log(`App is listening on port: ${process.env.PORT}`);
+//        } )
+
+//        console.log(`MongoDB is connected !! DB HOST: ${connectionInstance}`)
+//     } catch (err) {
+//         console.log('Error: ', err);
+        
+//     }
+// })()
