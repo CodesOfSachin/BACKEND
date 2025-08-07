@@ -9,3 +9,17 @@
 >> ![page model](<images/pages model.png>)
 
 >> ![Todo model](<images/Todo Model.png>)
+
+> # Middleware 
+
+> - Middleware is a function that runs between the request and response.
+
+> - It can modify the request or response or end the request, or call the next middleware.
+
+> - Common uses:
+
+>> - Logging
+>> - Authentication
+>> - Error handling
+
+> ![MiddleWare](images/MiddleWare.png)
