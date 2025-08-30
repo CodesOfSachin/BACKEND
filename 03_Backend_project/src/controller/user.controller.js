@@ -258,7 +258,9 @@ const changeCurrentPassword = asyncHandler( async( req, res ) => {
 const getCurrentUser = asyncHandler( async( req, res ) => {
     return res
     .status(200)
-    .json(200, req.user, "current user fetched successfully")
+    .json(
+        new ApiResponse(200, req.user, "current user fetched successfully")
+    )
 })
 
 const updateAccountDetails = asyncHandler( async( req, res ) => {
@@ -293,6 +295,8 @@ const updateUserAvatar = asyncHandler( async( req, res ) => {
         throw new ApiError(400, "Missing Avatar file")
     }
 
+    // Todo delete old image cloudinary
+
     const avatar = await uploadOnCloudinary(avatarLocalPath);
 
     if(!avatar.url) {
@@ -322,6 +326,8 @@ const updateUserCoverImage = asyncHandler( async( req, res ) => {
     if(!coverImageLocalPath) {
         throw new ApiError(400, "Missing cover image file")
     }
+
+    // Todo delete old image cloudinary
 
     const coverImage = await uploadOnCloudinary(coverImageLocalPath);
 
