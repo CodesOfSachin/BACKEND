@@ -271,8 +271,10 @@ const updateAccountDetails = asyncHandler( async( req, res ) => {
     const user = await User.findByIdAndUpdate(
         req.user?._id,
         {
-            email,
-            fullName
+            $set: {
+                fullName,
+                email
+            }
         },
         { new: true }
     ).select("-password")
@@ -290,5 +292,6 @@ export {
     logoutUser,
     refreshAccessToken,
     changeCurrentPassword,
-    getCurrentUser
+    getCurrentUser,
+    updateAccountDetails
 }
