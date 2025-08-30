@@ -295,6 +295,10 @@ const updateUserAvatar = asyncHandler( async( req, res ) => {
 
     const avatar = await uploadOnCloudinary(avatarLocalPath);
 
+    if(!avatar) {
+        throw new ApiError(500, "Error while uploading on cloudinary")
+    }
+
     const userAvatar = await User.findByIdAndUpdate(
         req.user?._id,
         {
@@ -320,5 +324,5 @@ export {
     changeCurrentPassword,
     getCurrentUser,
     updateAccountDetails,
-    updateUserAvatar
+    updateUserAvatar,
 }
