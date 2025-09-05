@@ -6,6 +6,7 @@ import { uploadOnCloudinary } from "../utils/cloudinary.js"
 import jwt from "jsonwebtoken"
 import mongoose from "mongoose";
 import { ObjectId } from "mongodb";
+import {v2 as cloudinary} from "cloudinary";
 
 
     const generateAccessAndRefrshTokens = async(userId) => {
@@ -293,16 +294,25 @@ const updateAccountDetails = asyncHandler( async( req, res ) => {
 
 const updateUserAvatar = asyncHandler( async( req, res ) => {
     const avatarLocalPath = req.file?.path;
+    const { avatar } = req.user;
+    
 
     if(!avatarLocalPath) {
         throw new ApiError(400, "Missing Avatar file")
     }
 
-    // Todo delete old image cloudinary
+    let avatarPublicId = null;
+    if (avatar && typeof avatar === 'string' && avatar.includes('/')) {
+        try {
+            avatarPublicId = avatar.split('/').pop().split('.')[0];
+        } catch (error) {
+            console.warn("Failed to extract public ID from avatar URL:", avatar);
+        }
+    }
 
-    const avatar = await uploadOnCloudinary(avatarLocalPath);
+    const newAvatar = await uploadOnCloudinary(avatarLocalPath);
 
-    if(!avatar.url) {
+    if(!newAvatar.url) {
         throw new ApiError(500, "Error while uploading on cloudinary")
     }
 
@@ -310,11 +320,20 @@ const updateUserAvatar = asyncHandler( async( req, res ) => {
         req.user?._id,
         {
             $set: {
-                avatar: avatar.url
+                avatar: newAvatar.url
             }
         },
         { new: true }
     ).select("-password")
+
+    // Clean up old avatar from cloudinary 
+    if(avatarPublicId) {
+        try{
+            await cloudinary.uploader.destroy(avatarPublicId)
+        } catch (error) {
+            console.error("Failed to delete old avatar from cloudinary:", error);
+        }
+    }
 
     return res
     .status(200)
