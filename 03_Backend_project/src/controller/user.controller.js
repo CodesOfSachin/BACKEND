@@ -221,7 +221,6 @@ const refreshAccessToken = asyncHandler( async( req, res ) => {
         }
     
         const {accessToken, refreshToken} = await generateAccessAndRefrshTokens(user._id)
-        console.log(`newRefresh token: ${refreshToken}`)
     
         return res
         .status(200)
@@ -270,7 +269,7 @@ const getCurrentUser = asyncHandler( async( req, res ) => {
 const updateAccountDetails = asyncHandler( async( req, res ) => {
     const {fullName, email} = req.body;
 
-    if(!fullName || !email) {
+    if(!(fullName || email)) {
         throw new ApiError(400, "All fields are required")
     }
 
